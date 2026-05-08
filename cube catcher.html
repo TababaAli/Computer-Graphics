@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cube Catcher Game</title>
+
+<style>
+    body{
+        margin:0;
+        overflow:hidden;
+        background:#ffe4ec;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+        font-family:Arial, sans-serif;
+    }
+
+    canvas{
+        background:#fff0f5;
+        border:3px solid #ff1493;
+    }
+
+    #score{
+        position:absolute;
+        top:20px;
+        color:#d1006f;
+        font-size:24px;
+        font-weight:bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="score">Score: 0</div>
+<canvas id="gameCanvas" width="500" height="600"></canvas>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const scoreText = document.getElementById("score");
+
+let score = 0;
+
+const player = {
+    x: 200,
+    y: 550,
+    width: 100,
+    height: 20,
+    speed: 7
+};
+
+const cube = {
+    x: Math.random() * 450,
+    y: 0,
+    size: 40,
+    speed: 4
+};
+
+const keys = {};
+
+document.addEventListener("keydown", (e)=>{
+    keys[e.key] = true;
+});
+
+document.addEventListener("keyup", (e)=>{
+    keys[e.key] = false;
+});
+
+function drawPlayer(){
+    ctx.fillStyle = "#ff69b4";
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function drawCube(){
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(cube.x, cube.y, cube.size, cube.size);
+}
+
+function movePlayer(){
+
+    if(keys["ArrowLeft"] && player.x > 0){
+        player.x -= player.speed;
+    }
+
+    if(keys["ArrowRight"] && player.x < canvas.width - player.width){
+        player.x += player.speed;
+    }
+}
+
+function moveCube(){
+    cube.y += cube.speed;
+
+    if(cube.y > canvas.height){
+        cube.y = 0;
+        cube.x = Math.random() * (canvas.width - cube.size);
+    }
+}
+
+function checkCollision(){
+
+    if(
+        cube.x < player.x + player.width &&
+        cube.x + cube.size > player.x &&
+        cube.y < player.y + player.height &&
+        cube.y + cube.size > player.y
+    ){
+        score++;
+        scoreText.innerText = "Score: " + score;
+
+        cube.y = 0;
+        cube.x = Math.random() * (canvas.width - cube.size);
+
+        cube.speed += 0.2;
+    }
+}
+
+function gameLoop(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    drawPlayer();
+    drawCube();
+
+    movePlayer();
+    moveCube();
+
+    checkCollision();
+
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
+
+</body>
+</html>
