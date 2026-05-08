@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Square</title>
+
+    <style>
+        body{
+            background:#fff0f5;
+            text-align:center;
+            font-family:Arial, sans-serif;
+        }
+
+        h2{
+            color:#c71585;
+        }
+
+        canvas{
+            border:2px solid #b03060;
+            background:#ffe4ec;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Interactive Color Changing Square</h2>
+
+<canvas id="myCanvas" width="500" height="350"></canvas>
+
+<script>
+
+let canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
+
+let squareX = 220;
+let squareY = 140;
+let size = 60;
+
+let squareColor = "plum";
+
+function drawSquare() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#ffe4ec";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = squareColor;
+    ctx.fillRect(squareX, squareY, size, size);
+}
+
+drawSquare();
+
+canvas.addEventListener("click", function() {
+
+    let colors = ["plum", "pink", "red", "#ff69b4", "#db7093", "#c71585"];
+
+    let randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+    squareColor = randomColor;
+
+    drawSquare();
+});
+
+</script>
+
+</body>
+</html>
