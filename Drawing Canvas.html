@@ -7,81 +7,91 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #74ebd5, #acb6e5);
+            background: linear-gradient(135deg, #ffc0cb, #dda0dd);
             text-align: center;
         }
 
         h2 {
             margin-top: 15px;
-            color: #333;
+            color: #8b004f;
         }
 
         .container {
-            background: white;
-            width: 700px;
+            background: #fff0f5;
+            width: 720px;
             margin: 20px auto;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 2px solid #ff69b4;
         }
 
         .controls {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .controls label {
-            margin: 0 10px;
             font-weight: bold;
+            color: #6a1b4d;
         }
 
         input[type="color"] {
             border: none;
-            width: 40px;
-            height: 30px;
+            width: 45px;
+            height: 35px;
             cursor: pointer;
+            background: transparent;
         }
 
         input[type="range"] {
             cursor: pointer;
+            accent-color: #ff1493;
         }
 
         button {
-            padding: 8px 15px;
+            padding: 8px 18px;
             border: none;
-            background: #ff4d4d;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
             color: white;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
+            font-weight: bold;
         }
 
         button:hover {
-            background: #cc0000;
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #ff1493, #c71585);
         }
 
         canvas {
-            border: 2px solid #333;
-            border-radius: 8px;
+            border: 3px solid #ff69b4;
+            border-radius: 12px;
             cursor: crosshair;
-            background: #fff;
+            background: #ffffff;
         }
     </style>
 
 </head>
 <body>
 
-<h2>🎨 Drawing Canvas</h2>
+<h2>🎨 Pink Plum Drawing Studio</h2>
 
 <div class="container">
 
     <div class="controls">
         <label>Color:</label>
-        <input type="color" id="colorPicker" value="#000000">
+        <input type="color" id="colorPicker" value="#ff1493">
 
         <label>Brush Size:</label>
-        <input type="range" id="brushSize" min="1" max="20" value="5">
+        <input type="range" id="brushSize" min="1" max="25" value="5">
 
-        <button onclick="clearCanvas()">Clear</button>
+        <button onclick="clearCanvas()">Clear Canvas</button>
     </div>
 
     <canvas id="canvas" width="650" height="400"></canvas>
@@ -96,24 +106,20 @@
     let color = document.getElementById("colorPicker").value;
     let size = document.getElementById("brushSize").value;
 
-    // Update color
     document.getElementById("colorPicker").addEventListener("input", function() {
         color = this.value;
     });
 
-    // Update brush size
     document.getElementById("brushSize").addEventListener("input", function() {
         size = this.value;
     });
 
-    // Start drawing
     canvas.addEventListener("mousedown", (e) => {
         drawing = true;
         ctx.beginPath();
         ctx.moveTo(e.offsetX, e.offsetY);
     });
 
-    // Draw
     canvas.addEventListener("mousemove", (e) => {
         if (!drawing) return;
 
@@ -124,11 +130,9 @@
         ctx.stroke();
     });
 
-    // Stop drawing
     canvas.addEventListener("mouseup", () => drawing = false);
     canvas.addEventListener("mouseleave", () => drawing = false);
 
-    // Clear canvas
     function clearCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
