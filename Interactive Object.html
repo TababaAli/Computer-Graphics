@@ -1,67 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Interactive Square</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Object</title>
 
     <style>
-        body{
-            background:#fff0f5;
-            text-align:center;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
             font-family:Arial, sans-serif;
         }
 
-        h2{
-            color:#c71585;
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+            overflow:hidden;
+        }
+
+        .container{
+            text-align:center;
+        }
+
+        h1{
+            color:white;
+            margin-bottom:20px;
+            letter-spacing:2px;
+            text-shadow:0 0 15px #38bdf8;
         }
 
         canvas{
-            border:2px solid #b03060;
-            background:#ffe4ec;
+            background:#f8fafc;
+            border:4px solid #38bdf8;
+            border-radius:20px;
+            box-shadow:0 0 35px rgba(56,189,248,0.6);
+        }
+
+        p{
+            color:#cbd5e1;
+            margin-top:15px;
+            font-size:18px;
         }
     </style>
 </head>
+
 <body>
 
-<h2>Interactive Color Changing Square</h2>
+    <div class="container">
 
-<canvas id="myCanvas" width="500" height="350"></canvas>
+        <h1>Interactive Object Movement</h1>
 
-<script>
+        <canvas id="gameCanvas" width="800" height="450"></canvas>
 
-let canvas = document.getElementById("myCanvas");
-let ctx = canvas.getContext("2d");
+        <p>Use Arrow Keys or W A S D Keys to Move</p>
 
-let squareX = 220;
-let squareY = 140;
-let size = 60;
+    </div>
 
-let squareColor = "plum";
+    <script>
 
-function drawSquare() {
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const player = {
+            x: 350,
+            y: 180,
+            size: 70,
+            speed: 5
+        };
 
-    ctx.fillStyle = "#ffe4ec";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const keys = {};
 
-    ctx.fillStyle = squareColor;
-    ctx.fillRect(squareX, squareY, size, size);
-}
+        window.addEventListener("keydown", (e) => {
+            keys[e.key] = true;
+        });
 
-drawSquare();
+        window.addEventListener("keyup", (e) => {
+            keys[e.key] = false;
+        });
 
-canvas.addEventListener("click", function() {
+        function update() {
 
-    let colors = ["plum", "pink", "red", "#ff69b4", "#db7093", "#c71585"];
+            if (keys["ArrowUp"] || keys["w"]) {
+                player.y -= player.speed;
+            }
 
-    let randomColor = colors[Math.floor(Math.random() * colors.length)];
+            if (keys["ArrowDown"] || keys["s"]) {
+                player.y += player.speed;
+            }
 
-    squareColor = randomColor;
+            if (keys["ArrowLeft"] || keys["a"]) {
+                player.x -= player.speed;
+            }
 
-    drawSquare();
-});
+            if (keys["ArrowRight"] || keys["d"]) {
+                player.x += player.speed;
+            }
 
-</script>
+            if(player.x < 0){
+                player.x = 0;
+            }
+
+            if(player.y < 0){
+                player.y = 0;
+            }
+
+            if(player.x + player.size > canvas.width){
+                player.x = canvas.width - player.size;
+            }
+
+            if(player.y + player.size > canvas.height){
+                player.y = canvas.height - player.size;
+            }
+        }
+
+        function drawCube(){
+
+            ctx.fillStyle = "#2563eb";
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+
+            ctx.fillStyle = "#60a5fa";
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(player.x + 20, player.y - 20);
+            ctx.lineTo(player.x + player.size + 20, player.y - 20);
+            ctx.lineTo(player.x + player.size, player.y);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = "#1d4ed8";
+            ctx.beginPath();
+            ctx.moveTo(player.x + player.size, player.y);
+            ctx.lineTo(player.x + player.size + 20, player.y - 20);
+            ctx.lineTo(player.x + player.size + 20, player.y + player.size - 20);
+            ctx.lineTo(player.x + player.size, player.y + player.size);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.shadowColor = "#38bdf8";
+            ctx.shadowBlur = 20;
+        }
+
+        function render(){
+
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+
+            update();
+
+            drawCube();
+
+            requestAnimationFrame(render);
+        }
+
+        render();
+
+    </script>
 
 </body>
 </html>
